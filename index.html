@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Red Bull + Protein — Projeto Acadêmico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#07102A; --navy2:#0E1D4A; --blue:#1B3A9A; --yellow:#FFC72C; --red:#E3263A;
+  --silver:#C9CFDB; --ink:#EEF1F7; --muted:#97A3C2; --line:rgba(255,255,255,.12);
+  --display:'Anton', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; --text:'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--navy);color:var(--ink);font-family:var(--text);overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit}
+::selection{background:var(--yellow);color:var(--navy)}
+
+/* grain */
+body::after{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:90;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1s steps(4) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
+
+/* top bar */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);z-index:100;
+  background:linear-gradient(90deg,var(--red),var(--yellow))}
+.nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;justify-content:space-between;align-items:center;
+  padding:20px clamp(16px,4vw,48px);mix-blend-mode:difference;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.nav .brand{font-family:var(--display);font-size:20px;letter-spacing:.04em}
+.nav .links{display:flex;gap:28px}
+.nav .links a{text-decoration:none;opacity:.8}
+.nav .links a:hover{opacity:1}
+.badge{position:fixed;left:clamp(16px,4vw,48px);bottom:18px;z-index:80;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(7,16,42,.75);backdrop-filter:blur(8px);border:1px solid var(--line);padding:8px 12px;border-radius:99px;color:var(--silver)}
+
+/* cursor */
+.cursor{position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;background:var(--yellow);pointer-events:none;z-index:110;
+  transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;mix-blend-mode:difference}
+.cursor.big{width:84px;height:84px;background:#fff}
+.cursor span{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:800;color:#000;opacity:0;letter-spacing:.1em}
+.cursor.big span{opacity:1}
+@media (hover:none){.cursor{display:none}}
+
+/* hero */
+.hero{position:relative;height:100svh;min-height:600px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(16px,4vw,48px) 90px}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.08);filter:saturate(1.1)}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(7,16,42,.55) 0%,rgba(7,16,42,.2) 35%,rgba(7,16,42,.92) 85%,var(--navy) 100%)}
+.hero > *:not(video){position:relative;z-index:2}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow)}
+.hero h1{font-family:var(--display);font-weight:400;line-height:.86;text-transform:uppercase;font-size:clamp(64px,15.5vw,250px);letter-spacing:-.01em;margin:18px 0 26px}
+.hero h1 .row{display:block;overflow:hidden}
+.hero h1 .row span{display:inline-block;transform:translateY(105%);animation:up 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+.hero h1 .row:nth-child(2) span{animation-delay:.15s}
+.hero h1 .plus{color:var(--red);-webkit-text-stroke:0}
+.hero h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
+@keyframes up{to{transform:none}}
+.hero .sub{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.hero .sub p{max-width:440px;color:var(--silver);font-size:18px;line-height:1.5}
+.scroll-cue{font-size:12px;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:12px;color:var(--muted)}
+.scroll-cue i{width:1px;height:48px;background:linear-gradient(var(--yellow),transparent);animation:cue 1.6s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* marquee */
+.marquee{border-block:1px solid var(--line);overflow:hidden;background:var(--yellow);color:var(--navy);transform:rotate(-1.5deg);margin:40px -2vw;width:104vw}
+.marquee .track{display:flex;width:max-content;animation:mq 26s linear infinite}
+.marquee span{font-family:var(--display);font-size:clamp(28px,4vw,56px);text-transform:uppercase;padding:14px 0;white-space:nowrap}
+.marquee span b{color:var(--red);font-weight:400;padding:0 .5em}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* sections */
+section{position:relative}
+.wrap{padding:clamp(80px,12vw,160px) clamp(16px,4vw,48px);max-width:1440px;margin:0 auto}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:24px;border-top:1px solid var(--line);padding-top:20px;margin-bottom:clamp(40px,6vw,80px);flex-wrap:wrap}
+.sec-head .num{font-family:var(--display);font-size:18px;color:var(--yellow)}
+.sec-head .lbl{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+h2.big{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.92;font-size:clamp(44px,8vw,128px)}
+h2.big em{font-style:normal;color:var(--yellow)}
+h2.big .r{color:var(--red)}
+.lead{font-size:clamp(18px,1.6vw,22px);line-height:1.6;color:var(--silver);max-width:620px}
+
+/* manifesto: word reveal */
+.manifesto{height:260vh}
+.manifesto .stick{position:sticky;top:0;height:100svh;display:flex;align-items:center;padding:0 clamp(16px,4vw,48px)}
+.manifesto p{font-family:var(--display);text-transform:uppercase;font-size:clamp(40px,7.4vw,116px);line-height:1;max-width:1300px;margin:0 auto}
+.manifesto .w{opacity:.12;transition:opacity .3s,color .3s}
+.manifesto .w.on{opacity:1}
+.manifesto .w.hl.on{color:var(--yellow)}
+.manifesto .w.rd.on{color:var(--red)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.stat{padding:36px 24px 36px 0;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat + .stat{padding-left:24px}
+.stat .n{font-family:var(--display);font-size:clamp(52px,6.4vw,104px);line-height:1;color:var(--ink)}
+.stat .n small{font-size:.5em;color:var(--yellow)}
+.stat p{margin-top:12px;color:var(--muted);font-size:15px;line-height:1.5;max-width:240px}
+.src{margin-top:28px;font-size:12px;color:var(--muted);line-height:1.6}
+.src a{color:var(--muted)}
+
+/* product */
+.product{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(32px,5vw,80px);align-items:center}
+.frame{position:relative;overflow:hidden;border-radius:6px;background:#000}
+.frame img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);will-change:transform}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:36px}
+.specs div{background:var(--navy);padding:22px}
+.specs b{display:block;font-family:var(--display);font-weight:400;font-size:28px;text-transform:uppercase;margin-bottom:6px}
+.specs span{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* positioning */
+.posit{background:var(--yellow);color:var(--navy)}
+.posit .sec-head{border-color:rgba(7,16,42,.25)}
+.posit .sec-head .num{color:var(--red)}
+.posit .sec-head .lbl{color:rgba(7,16,42,.7)}
+.posit blockquote{font-family:var(--display);text-transform:uppercase;font-size:clamp(34px,5.4vw,86px);line-height:1.02;max-width:1300px}
+.posit blockquote u{text-decoration:none;background:var(--navy);color:var(--yellow);padding:0 .15em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.pills div{border:2px solid var(--navy);padding:24px;border-radius:6px}
+.pills h4{font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.pills p{font-size:18px;line-height:1.45;font-weight:500}
+.persona{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.persona div{background:var(--navy);color:var(--ink);padding:28px;border-radius:6px}
+.persona h4{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--yellow);margin-bottom:10px}
+.persona h5{font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;margin-bottom:8px}
+.persona p{color:var(--silver);line-height:1.5}
+
+/* horizontal gallery */
+.hscroll{height:420vh}
+.hscroll .stick{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.hscroll .head{padding:0 clamp(16px,4vw,48px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:36px}
+.hscroll .counter{font-family:var(--display);font-size:clamp(40px,5vw,72px);color:var(--yellow)}
+.htrack{display:flex;gap:28px;padding:0 clamp(16px,4vw,48px);width:max-content;will-change:transform}
+.post{width:min(30vw,380px);flex:none}
+.post .frame{aspect-ratio:4/5}
+.post .frame img{transform:none;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.post:hover .frame img{transform:scale(1.05)}
+.post figcaption{display:flex;justify-content:space-between;margin-top:12px;font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.post figcaption b{color:var(--ink)}
+
+/* films */
+.films{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+.film{position:relative;overflow:hidden;border-radius:6px;background:#000;cursor:pointer}
+.film video{width:100%;height:100%;object-fit:cover}
+.film.wide{grid-column:span 12;aspect-ratio:16/9}
+.film.tall{grid-column:span 4;aspect-ratio:3/4}
+.film.mid{aspect-ratio:4/5}
+.film .cap{position:absolute;left:0;right:0;bottom:0;padding:20px;display:flex;justify-content:space-between;align-items:flex-end;
+  background:linear-gradient(transparent,rgba(0,0,0,.75));pointer-events:none}
+.film .cap b{font-family:var(--display);font-weight:400;font-size:clamp(22px,2.4vw,34px);text-transform:uppercase}
+.film .cap span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+.film .play{position:absolute;top:20px;right:20px;width:52px;height:52px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;transition:transform .3s}
+.film.playing .play{transform:scale(0)}
+.film .play::before{content:"";border-left:14px solid var(--navy);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+
+/* showcase blocks */
+.show{display:grid;grid-template-columns:1fr 2.2fr;gap:clamp(24px,4vw,64px);align-items:start;margin-bottom:clamp(80px,10vw,140px)}
+.show:last-child{margin-bottom:0}
+.show .txt{position:sticky;top:110px}
+.show .txt h3{font-family:var(--display);font-weight:400;font-size:clamp(36px,4.4vw,68px);line-height:.95;text-transform:uppercase;margin:14px 0 18px}
+.show .txt p{color:var(--silver);line-height:1.6}
+.show .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.show .tags span{font-size:12px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:7px 12px;border-radius:99px;color:var(--silver)}
+.show .frame img{transform:none}
+.zoom{cursor:zoom-in}
+
+/* kpis */
+.kpi{width:100%;border-collapse:collapse;font-size:clamp(16px,1.4vw,20px)}
+.kpi td{padding:22px 0;border-bottom:1px solid var(--line)}
+.kpi td:first-child{font-family:var(--display);font-size:clamp(24px,2.4vw,36px);text-transform:uppercase;width:30%}
+.kpi td:last-child{text-align:right;color:var(--yellow);font-weight:700}
+.kpi td:nth-child(2){color:var(--silver)}
+
+/* end */
+.end{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 16px;
+  background:radial-gradient(circle at 50% 120%,rgba(227,38,58,.35),transparent 55%),radial-gradient(circle at 50% -20%,rgba(27,58,154,.6),transparent 60%),var(--navy)}
+.end h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(64px,14vw,220px);line-height:.85}
+.end h2 span{color:var(--yellow)}
+.end .cta{margin-top:40px;display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--navy);text-decoration:none;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;font-size:14px;padding:18px 28px;border-radius:99px;transition:transform .3s,background .3s}
+.end .cta:hover{transform:translateY(-3px);background:var(--yellow)}
+.end .disc{margin-top:48px;max-width:640px;font-size:13px;line-height:1.7;color:var(--muted)}
+.end .team{margin-top:20px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--silver)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.clip{clip-path:inset(100% 0 0 0);transition:clip-path 1.3s cubic-bezier(.7,0,.2,1)}
+.clip.in{clip-path:inset(0 0 0 0)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:120;background:rgba(3,7,20,.94);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lb.open{display:flex}
+.lb img{max-height:92vh;max-width:96vw;object-fit:contain;border-radius:4px}
+
+/* responsive */
+@media (max-width:900px){
+  .nav .links{display:none}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{border-right:none;border-bottom:1px solid var(--line);padding:28px 12px 28px 0}
+  .stat + .stat{padding-left:0}
+  .product,.show{grid-template-columns:1fr}
+  .show .txt{position:static}
+  .pills,.persona{grid-template-columns:1fr}
+  .film.tall{grid-column:span 12;aspect-ratio:3/4}
+  .hscroll{height:auto}
+  .hscroll .stick{position:static;height:auto;padding:80px 0}
+  .htrack{overflow-x:auto;width:auto;scroll-snap-type:x mandatory;transform:none!important;padding-bottom:16px}
+  .post{width:76vw;scroll-snap-align:center}
+  .manifesto{height:auto}
+  .manifesto .stick{position:static;height:auto;padding:100px 16px}
+  .manifesto .w{opacity:1}
+  .kpi td:first-child{width:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}.clip{clip-path:none}
+  .hero h1 .row span{transform:none}
+  .manifesto .w{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="cursor" id="cursor"><span>PLAY</span></div>
+<nav class="nav">
+  <div class="brand">RB + PROTEIN</div>
+  <div class="links"><a href="#conceito">Conceito</a><a href="#posicionamento">Posicionamento</a><a href="#campanha">Campanha</a><a href="#filmes">Filmes</a></div>
+</nav>
+<div class="badge">Projeto acadêmico · Conceito fictício</div>
+
+<!-- HERO -->
+<header class="hero">
+  <video src="assets/hero-bg.mp4" autoplay muted loop playsinline poster="assets/poster-forca.jpg"></video>
+  <div class="eyebrow">Projeto acadêmico de marketing · 2026</div>
+  <h1>
+    <span class="row"><span>Red Bull</span></span>
+    <span class="row"><span><span class="plus">+</span><span class="outline">Protein</span></span></span>
+  </h1>
+  <div class="sub">
+    <p>Energia e proteína na mesma lata. Um conceito de extensão de linha criado para uma apresentação acadêmica, sem fins comerciais.</p>
+    <div class="scroll-cue"><i></i>Role para descobrir</div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true"><div class="track">
+  <span>Energia <b>+</b> Proteína <b>+</b> O novo gás para a sua evolução <b>+</b> Energia <b>+</b> Proteína <b>+</b> O gás do seu treino <b>+</b>&nbsp;</span>
+  <span>Energia <b>+</b> Proteína <b>+</b> O novo gás para a sua evolução <b>+</b> Energia <b>+</b> Proteína <b>+</b> O gás do seu treino <b>+</b>&nbsp;</span>
+</div></div>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="manifesto">
+  <div class="stick"><p id="mtext">E se energia e proteína fossem uma só ideia? Sem shaker, sem preparo, sem bagunça. Só abrir, beber e seguir em frente.</p></div>
+</section>
+
+<!-- MERCADO -->
+<section id="mercado"><div class="wrap">
+  <div class="sec-head rv"><span class="num">01</span><span class="lbl">Contexto de mercado</span></div>
+  <h2 class="big rv">A proteína saiu da academia<br>e foi <em>para a gôndola</em></h2>
+  <div class="stats rv" style="margin-top:64px">
+    <div class="stat"><div class="n" data-count="124" data-prefix="+" data-suffix="%">0</div><p>Crescimento em volume do whey protein no Brasil</p></div>
+    <div class="stat"><div class="n" data-count="56" data-prefix="+" data-suffix="%">0</div><p>Crescimento dos energéticos sem açúcar</p></div>
+    <div class="stat"><div class="n" data-count="2" data-prefix="R$ " data-suffix=" bi">0</div><p>Movimentados por ano com produtos de proteína adicionada</p></div>
+    <div class="stat"><div class="n" data-count="14" data-prefix="~" data-suffix=" bi">0</div><p>Latas de Red Bull vendidas no mundo em 2025</p></div>
+  </div>
+  <p class="src rv">Fontes: Scanntech/McKinsey via <a href="https://www.band.com.br/saude/noticias/consumo-de-produtos-proteicos-cresce-e-muda-habitos-alimentares-no-brasil-202601210856" target="_blank" rel="noopener">Band</a> (jan–out/2025, volume) ·
+  Euromonitor via <a href="https://www.theagribiz.com/empresas/alimentos/a-onda-da-proteina-adicionada-chegou-ao-brasil-e-mobiliza-o-agro/" target="_blank" rel="noopener">The AgriBiz</a> ·
+  Resultados 2025 via <a href="https://www.gurufocus.com/news/8540587/red-bull-sales-jump-as-2025-can-volumes-hit-record" target="_blank" rel="noopener">GuruFocus</a></p>
+</div></section>
+
+<!-- CONCEITO -->
+<section id="conceito"><div class="wrap">
+  <div class="sec-head rv"><span class="num">02</span><span class="lbl">O conceito</span></div>
+  <div class="product">
+    <div class="frame clip" style="aspect-ratio:1024/572"><img class="para" src="assets/lata-trio.jpg" alt="Mockup da lata Red Bull + Protein em três ângulos"></div>
+    <div>
+      <h2 class="big rv" style="font-size:clamp(44px,6vw,96px)">Uma extensão <em>de linha</em>, não uma marca nova</h2>
+      <p class="lead rv" style="margin-top:24px">O "+" comunica soma: a energia de sempre, mais um benefício. Mesma lata slim de 250 ml, mesma identidade em azul, prata, vermelho e amarelo.</p>
+      <div class="specs rv">
+        <div><b>250 ml</b><span>Lata slim, formato tradicional</span></div>
+        <div><b>+ Proteína</b><span>Fórmula a definir pelo grupo</span></div>
+        <div><b>Pronto</b><span>Sem preparo, sem shaker</span></div>
+        <div><b>Premium</b><span>Preço acima da linha regular</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- POSICIONAMENTO -->
+<section class="posit" id="posicionamento"><div class="wrap">
+  <div class="sec-head rv"><span class="num">03</span><span class="lbl">Posicionamento & público</span></div>
+  <blockquote class="rv">Para <u>jovens adultos que treinam</u> e vivem com a agenda cheia, Red Bull + Protein é o energético que <u>soma proteína</u> à energia de sempre.</blockquote>
+  <div class="pills rv">
+    <div><h4>Paridade</h4><p>Mesma lata, mesma marca, mesma energia.</p></div>
+    <div><h4>Diferença</h4><p>Proteína adicionada, sem mudar o ritual de consumo.</p></div>
+    <div><h4>Preço</h4><p>Premium, acima da linha regular.</p></div>
+  </div>
+  <div class="persona rv">
+    <div><h4>Primário · 18 a 30 anos</h4><h5>Quem treina e estuda ou trabalha</h5><p>Já consome whey e energético, mas em momentos separados.</p></div>
+    <div><h4>Secundário · 25 a 40 anos</h4><h5>O profissional sem tempo</h5><p>Quer energia e uma opção mais completa, sem preparar shake.</p></div>
+  </div>
+</div></section>
+
+<!-- CARROSSEL -->
+<section class="hscroll" id="campanha">
+  <div class="stick">
+    <div class="head">
+      <div><div class="eyebrow" style="margin-bottom:14px">04 · Campanha digital</div><h2 class="big" style="font-size:clamp(40px,6vw,96px)">Carrossel <em>de lançamento</em></h2></div>
+      <div class="counter"><span id="hcount">1</span>/8</div>
+    </div>
+    <div class="htrack" id="htrack">
+      <figure class="post"><div class="frame zoom"><img src="assets/post-1.jpg" alt="Post 1: Red Bull Protein+, energia para ir mais longe"></div><figcaption><b>Abertura</b><span>01</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-2.jpg" alt="Post 2: Ainda perdendo tempo com preparo?"></div><figcaption><b>O problema</b><span>02</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-3.jpg" alt="Post 3: A solução na sua rotina"></div><figcaption><b>A solução</b><span>03</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-4.jpg" alt="Post 4: Performance em qualquer lugar"></div><figcaption><b>Ocasiões</b><span>04</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-5.jpg" alt="Post 5: Uma fórmula que impulsiona seu potencial"></div><figcaption><b>A fórmula</b><span>05</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-6.jpg" alt="Post 6: Naming, opções da agência"></div><figcaption><b>Naming</b><span>06</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-7.jpg" alt="Post 7: Campanha de mídia exterior"></div><figcaption><b>Mídia OOH</b><span>07</span></figcaption></figure>
+      <figure class="post"><div class="frame zoom"><img src="assets/post-8.jpg" alt="Post 8: O novo gás para a sua evolução"></div><figcaption><b>Assinatura</b><span>08</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- FILMES -->
+<section id="filmes"><div class="wrap">
+  <div class="sec-head rv"><span class="num">05</span><span class="lbl">Filmes publicitários</span></div>
+  <h2 class="big rv" style="margin-bottom:56px">Força para <em>ir além</em></h2>
+  <div class="films">
+    <div class="film wide rv"><video src="assets/filme-forca.mp4" poster="assets/poster-forca.jpg" playsinline preload="metadata"></video><div class="play"></div><div class="cap"><b>Força para ir além</b><span>16:9 · 26 s</span></div></div>
+    <div class="film tall rv"><video src="assets/filme-aviao.mp4" poster="assets/poster-aviao.jpg" playsinline preload="metadata"></video><div class="play"></div><div class="cap"><b>O impossível</b><span>9:16 · 10 s</span></div></div>
+    <div class="film tall rv"><video src="assets/filme-produto.mp4" poster="assets/poster-produto.jpg" playsinline preload="metadata" muted></video><div class="play"></div><div class="cap"><b>Produto</b><span>9:16 · 10 s</span></div></div>
+    <div class="film tall rv"><video src="assets/filme-animacao.mp4" poster="assets/poster-animacao.jpg" playsinline preload="metadata"></video><div class="play"></div><div class="cap"><b>Animação</b><span>4:5 · 10 s</span></div></div>
+  </div>
+</div></section>
+
+<!-- DESDOBRAMENTOS -->
+<section id="desdobramentos"><div class="wrap">
+  <div class="sec-head rv"><span class="num">06</span><span class="lbl">Desdobramentos da campanha</span></div>
+  <div class="show">
+    <div class="txt rv"><div class="eyebrow">Social</div><h3>Parceria com influenciadores</h3><p>Arte principal 4:5, post de feed e stories 9:16 com enquete. Criadores fitness mostram a lata na rotina real.</p><div class="tags"><span>Instagram</span><span>Feed</span><span>Stories</span></div></div>
+    <div class="frame clip zoom"><img src="assets/influenciadores.jpg" alt="Peças de parceria com influenciadores: arte 4:5, feed e stories"></div>
+  </div>
+  <div class="show">
+    <div class="txt rv"><div class="eyebrow">Mídia exterior</div><h3>OOH: o novo gás para a sua força</h3><p>Abrigo de ônibus, painel digital perto de estádio, close da lata e cartaz vertical.</p><div class="tags"><span>Abrigo</span><span>Painel digital</span><span>Cartaz</span></div></div>
+    <div class="frame clip zoom"><img src="assets/ooh.jpg" alt="Campanha de mídia exterior em quatro formatos"></div>
+  </div>
+  <div class="show">
+    <div class="txt rv"><div class="eyebrow">Ponto de venda</div><h3>Display de chão especial</h3><p>Lata gigante, prateleiras dedicadas e duas versões de ambiente: academia premium e supermercado.</p><div class="tags"><span>Academia</span><span>Supermercado</span><span>Trade</span></div></div>
+    <div class="frame clip zoom"><img src="assets/display-pdv.jpg" alt="Display de chão especial com simulações em academia e supermercado"></div>
+  </div>
+</div></section>
+
+<!-- KPIs -->
+<section id="kpis"><div class="wrap">
+  <div class="sec-head rv"><span class="num">07</span><span class="lbl">Como medir</span></div>
+  <h2 class="big rv" style="margin-bottom:48px">Metas para os <em>primeiros 6 meses</em></h2>
+  <table class="kpi rv">
+    <tr><td>Conhecimento</td><td>Visualizações dos filmes</td><td>[__ milhões]</td></tr>
+    <tr><td>Engajamento</td><td>Taxa de engajamento nas redes</td><td>[__ %]</td></tr>
+    <tr><td>Experimentação</td><td>Amostras distribuídas</td><td>[__ mil]</td></tr>
+    <tr><td>Conversão</td><td>Recompra após a amostra</td><td>[__ %]</td></tr>
+  </table>
+</div></section>
+
+<!-- END -->
+<section class="end">
+  <div class="eyebrow rv">Obrigado</div>
+  <h2 class="rv">Energia<br><span>+</span> Proteína</h2>
+  <a class="cta rv" href="https://www.instagram.com/redbull.protein" target="_blank" rel="noopener">Ver o perfil do projeto →</a>
+  <p class="team rv">[Nome do grupo] · [Disciplina] · [Instituição]</p>
+  <p class="disc rv">Red Bull + Protein é um conceito acadêmico fictício, desenvolvido para uma apresentação de marketing. Não é um produto real e não tem relação, aprovação ou patrocínio da Red Bull. As marcas citadas pertencem aos seus titulares. Imagens e vídeos são simulações geradas pelo grupo.</p>
+</section>
+
+<div class="lb" id="lb"><img alt=""></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile = () => innerWidth <= 900;
+
+  // reveal
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.15});
+  document.querySelectorAll('.rv,.clip').forEach(el => io.observe(el));
+
+  // counters
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return; cio.unobserve(e.target);
+    const el = e.target, to = +el.dataset.count, pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+    const t0 = performance.now(), d = reduce ? 0 : 1600;
+    const step = t => { const p = d ? Math.min(1,(t-t0)/d) : 1; const v = Math.round(to*(1-Math.pow(1-p,3)));
+      el.innerHTML = pre + v + '<small>' + suf + '</small>'; if (p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }), {threshold:.5});
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+  // manifesto words
+  const mt = document.getElementById('mtext');
+  const hl = ['energia','proteína'], rd = ['só','ideia?'];
+  mt.innerHTML = mt.textContent.split(' ').map(w => {
+    const k = w.toLowerCase(); const c = hl.includes(k) ? ' hl' : rd.includes(k) ? ' rd' : '';
+    return `<span class="w${c}">${w}</span>`; }).join(' ');
+  const words = [...mt.querySelectorAll('.w')];
+  const man = document.getElementById('manifesto');
+
+  // horizontal
+  const hs = document.getElementById('campanha'), track = document.getElementById('htrack'), hc = document.getElementById('hcount');
+
+  const prog = document.getElementById('progress');
+  const paras = document.querySelectorAll('.para');
+
+  const onScroll = () => {
+    const y = scrollY, H = document.documentElement.scrollHeight - innerHeight;
+    prog.style.transform = `scaleX(${H ? y/H : 0})`;
+    if (reduce) return;
+    if (!mobile()) {
+      // manifesto
+      const r = man.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+      const n = Math.floor(p * (words.length + 2));
+      words.forEach((w,i) => w.classList.toggle('on', i < n));
+      // horizontal
+      const hr = hs.getBoundingClientRect(), hp = Math.min(1, Math.max(0, -hr.top / (hr.height - innerHeight)));
+      const max = track.scrollWidth - innerWidth;
+      track.style.transform = `translateX(${-hp*max}px)`;
+      hc.textContent = Math.min(8, 1 + Math.floor(hp*8));
+    }
+    // parallax
+    paras.forEach(img => { const b = img.parentElement.getBoundingClientRect();
+      const p = (b.top + b.height/2 - innerHeight/2) / innerHeight; img.style.transform = `scale(1.12) translateY(${p*-6}%)`; });
+  };
+  addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll); onScroll();
+
+  // films
+  const films = document.querySelectorAll('.film');
+  films.forEach(f => {
+    const v = f.querySelector('video');
+    f.addEventListener('click', () => {
+      films.forEach(o => { if (o !== f) { o.querySelector('video').pause(); o.classList.remove('playing'); } });
+      if (v.paused) { v.muted = false; v.play(); f.classList.add('playing'); }
+      else { v.pause(); f.classList.remove('playing'); }
+    });
+    v.addEventListener('ended', () => f.classList.remove('playing'));
+  });
+
+  // lightbox
+  const lb = document.getElementById('lb'), lbi = lb.querySelector('img');
+  document.querySelectorAll('.zoom').forEach(z => z.addEventListener('click', () => {
+    const im = z.querySelector('img'); lbi.src = im.src; lbi.alt = im.alt; lb.classList.add('open'); }));
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+  // cursor
+  const cur = document.getElementById('cursor');
+  let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
+  addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+  (function loop(){ cx += (tx-cx)*.2; cy += (ty-cy)*.2; cur.style.left = cx+'px'; cur.style.top = cy+'px'; requestAnimationFrame(loop); })();
+  const label = cur.querySelector('span');
+  document.querySelectorAll('.film').forEach(el => { el.addEventListener('mouseenter', () => { label.textContent='PLAY'; cur.classList.add('big'); }); el.addEventListener('mouseleave', () => cur.classList.remove('big')); });
+  document.querySelectorAll('.zoom').forEach(el => { el.addEventListener('mouseenter', () => { label.textContent='VER'; cur.classList.add('big'); }); el.addEventListener('mouseleave', () => cur.classList.remove('big')); });
+})();
+</script>
+</body>
+</html>
